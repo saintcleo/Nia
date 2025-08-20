@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>Flip‑Book 4‑Way (Mobile)</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <canvas id="game" width="480" height="270"></canvas>
+
+  <div id="hud">
+    <div class="row">
+      <button id="btnUp" aria-label="Move Up">⬆︎</button>
+    </div>
+    <div class="row">
+      <button id="btnLeft" aria-label="Move Left">⬅︎</button>
+      <button id="btnDown" aria-label="Move Down">⬇︎</button>
+      <button id="btnRight" aria-label="Move Right">➡︎</button>
+    </div>
+    <div class="row">
+      <button id="btnSpeed" aria-label="Toggle Speed">Speed: 1×</button>
+      <button id="btnStep" aria-label="Toggle Step Rate">Step rate: 180ms</button>
+    </div>
+  </div>
+
+  <script src="main.js"></script>
+</body>
+</html>
