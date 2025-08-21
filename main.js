@@ -1,15 +1,20 @@
-// Rochelle's 4-way flip-book demo (no idle frames)
-// We'll use step1 as stand-in for idle so she stays visible when not moving.
+// Rochelle's 4-way flip-book demo (RIGHT/LEFT now 3-step + idle)
 
 const SPRITES = {
+  // index 0 = IDLE, then step1, MID, step2
   right: [
-    "https://i.imgur.com/k0VzrMh_d.webp?maxwidth=760&fidelity=grand",
-    "https://i.imgur.com/woD9rax_d.webp?maxwidth=760&fidelity=grand",
+    "https://i.imgur.com/z7GSZUR_d.webp?maxwidth=760&fidelity=grand", // IDLE (RIGHT)
+    "https://i.imgur.com/k0VzrMh_d.webp?maxwidth=760&fidelity=grand", // STEP 1
+    "https://i.imgur.com/HTwjbSx_d.webp?maxwidth=760&fidelity=grand", // MID (between 1 & 2)
+    "https://i.imgur.com/woD9rax_d.webp?maxwidth=760&fidelity=grand", // STEP 2
   ],
   left: [
-    "https://i.imgur.com/zKUhBtG_d.webp?maxwidth=760&fidelity=grand",
-    "https://i.imgur.com/tkFpehq_d.webp?maxwidth=760&fidelity=grand",
+    "https://i.imgur.com/fd6sQJP_d.webp?maxwidth=760&fidelity=grand", // IDLE (LEFT)
+    "https://i.imgur.com/zKUhBtG_d.webp?maxwidth=760&fidelity=grand", // STEP 1
+    "https://i.imgur.com/xZct67F_d.webp?maxwidth=760&fidelity=grand", // MID (between 1 & 2)
+    "https://i.imgur.com/tkFpehq_d.webp?maxwidth=760&fidelity=grand", // STEP 2
   ],
+  // up/down still 2 frames; index 0 acts as idle
   up: [
     "https://i.imgur.com/PNt1XI0_d.webp?maxwidth=760&fidelity=grand",
     "https://i.imgur.com/9z2kMjb_d.webp?maxwidth=760&fidelity=grand",
@@ -92,10 +97,13 @@ btnStep.addEventListener('click', ()=>{
   btnStep.textContent = `Step rate: ${stepInterval}ms`;
 });
 
+// choose the sprite to draw
 function pickFrame(){
   const list = SPRITES[dir];
-  if (!moving) return list[0];       // treat step1 as idle/stand
-  return list[stepIndex % 2];        // 2-frame flip
+  if (!moving) return list[0]; // idle is always index 0 for that direction
+  // cycle frames 1..end (RIGHT/LEFT = 3 frames; UP/DOWN = 1 frame)
+  const moveFrames = list.length - 1;
+  return list[1 + (stepIndex % moveFrames)];
 }
 
 function update(dt){
@@ -114,7 +122,7 @@ function update(dt){
     stepTimer += dt;
     if (stepTimer >= stepInterval){
       stepTimer = 0;
-      stepIndex = (stepIndex + 1) % 2;
+      stepIndex = (stepIndex + 1);
     }
   } else {
     stepIndex = 0;
@@ -125,6 +133,7 @@ function update(dt){
 async function render(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
 
+  // simple background stripes
   ctx.globalAlpha = 0.5;
   for (let i=0;i<canvas.width;i+=24){
     ctx.fillStyle = (i/24)%2===0 ? "#0e0e0e" : "#0a0a0a";
