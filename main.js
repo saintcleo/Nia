@@ -1,14 +1,14 @@
-// Rochelle's 4-way flip‑book demo (no idle frames)
+// Rochelle's 4-way flip-book demo (no idle frames)
 // We'll use step1 as stand-in for idle so she stays visible when not moving.
 
 const SPRITES = {
   right: [
-    "https://i.imgur.com/qEVmYut_d.webp?maxwidth=760&fidelity=grand",
-    "https://i.imgur.com/aSz54Rh_d.webp?maxwidth=760&fidelity=grand",
+    "https://i.imgur.com/k0VzrMh_d.webp?maxwidth=760&fidelity=grand",
+    "https://i.imgur.com/woD9rax_d.webp?maxwidth=760&fidelity=grand",
   ],
   left: [
-    "https://i.imgur.com/uQAOvI7_d.webp?maxwidth=760&fidelity=grand",
-    "https://i.imgur.com/qkX7Yca_d.webp?maxwidth=760&fidelity=grand",
+    "https://i.imgur.com/zKUhBtG_d.webp?maxwidth=760&fidelity=grand",
+    "https://i.imgur.com/tkFpehq_d.webp?maxwidth=760&fidelity=grand",
   ],
   up: [
     "https://i.imgur.com/PNt1XI0_d.webp?maxwidth=760&fidelity=grand",
@@ -99,7 +99,6 @@ function pickFrame(){
 }
 
 function update(dt){
-  // velocity & facing
   vx = 0; vy = 0; moving = false;
   const base = 0.10 * speedMult;
   if (hold.left && !hold.right){ vx=-base; dir="left";  moving=true; }
@@ -111,7 +110,6 @@ function update(dt){
   x = Math.max(40, Math.min(canvas.width-40, x));
   y = Math.max(60, Math.min(canvas.height-40, y));
 
-  // stepping
   if (moving){
     stepTimer += dt;
     if (stepTimer >= stepInterval){
@@ -127,7 +125,6 @@ function update(dt){
 async function render(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
 
-  // simple vertical stripes for ground
   ctx.globalAlpha = 0.5;
   for (let i=0;i<canvas.width;i+=24){
     ctx.fillStyle = (i/24)%2===0 ? "#0e0e0e" : "#0a0a0a";
@@ -138,11 +135,9 @@ async function render(){
   const src = pickFrame();
   const img = await loadImage(src);
 
-  // draw character
-  const w = 96, h = 128; // change to scale sprite
+  const w = 96, h = 128;
   ctx.drawImage(img, 0, 0, img.width, img.height, x - w/2, y - h, w, h);
 
-  // HUD text
   ctx.fillStyle = "#bbb";
   ctx.font = "12px system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial";
   ctx.fillText(`Dir: ${dir} | Moving: ${moving?'yes':'no'} | Speed: ${speedMult}x | Step: ${stepInterval}ms`, 10, 18);
